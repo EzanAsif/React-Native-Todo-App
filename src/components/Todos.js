@@ -30,6 +30,14 @@ export default function Todos() {
     setNewTodo(null);
   };
 
+  const todoDelete = (todoId) => {
+    let result = todoData.filter((todo) => {
+      return todo.id != todoId;
+    });
+    setTodoData(result);
+    // return todoData;
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.heading1}>Todo App</Text>
@@ -47,7 +55,14 @@ export default function Todos() {
           style={styles.todoInput}
           placeholderTextColor="#fefefe"
           placeholder="Enter todo here"
-          onChangeText={(text) => setNewTodo(text)}
+          onChangeText={(text) => {
+            let answer = {
+              id: Math.floor(Math.random() * 100000000),
+              todo: text,
+            };
+            setNewTodo(answer);
+            console.log(answer.id);
+          }}
         />
         <TouchableOpacity onPress={submitForm} style={styles.button}>
           <Ionicons name="add-outline" size={35} color="black" />
@@ -57,11 +72,13 @@ export default function Todos() {
         <Text style={styles.heading2}>All Todos</Text>
         <FlatList
           data={todoData}
-          renderItem={(data, key) => {
+          renderItem={(data) => {
             const val = data.item;
+            var index = 0;
+            index++;
             return (
-              <View style={styles.todoCard} key={key}>
-                <Text style={{ width: "80%", color: "white" }}>{val}</Text>
+              <View style={styles.todoCard} key={index}>
+                <Text style={{ width: "80%", color: "white" }}>{val.todo}</Text>
                 <View style={styles.menuStyles}>
                   <Menu>
                     <MenuTrigger>
@@ -72,7 +89,11 @@ export default function Todos() {
                       <MenuOption>
                         <Text>Edit</Text>
                       </MenuOption>
-                      <MenuOption>
+                      <MenuOption
+                        onSelect={() => {
+                          todoDelete(val.id);
+                        }}
+                      >
                         <Text>Delete</Text>
                       </MenuOption>
                     </MenuOptions>
@@ -135,7 +156,7 @@ const styles = StyleSheet.create({
   },
   menuStyles: {
     width: "20%",
-    height: "100%",
+    // height: "100%",
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
