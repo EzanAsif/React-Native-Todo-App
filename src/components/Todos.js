@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   StyleSheet,
   Text,
@@ -23,9 +23,13 @@ export default function Todos() {
   const [todoData, setTodoData] = useState([]);
   const [newtodo, setNewTodo] = useState();
 
-  const submitForm = () => {
+  const clearInp = useRef(null);
+
+  const submitValue = () => {
     if (newtodo) {
       setTodoData([...todoData, newtodo]);
+      console.log(clearInp.current.clear)
+      clearInp.current.clear();
     }
     setNewTodo(null);
   };
@@ -52,6 +56,7 @@ export default function Todos() {
         }}
       >
         <TextInput
+          ref={clearInp}
           style={styles.todoInput}
           placeholderTextColor="#fefefe"
           placeholder="Enter todo here"
@@ -64,7 +69,7 @@ export default function Todos() {
             console.log(answer.id);
           }}
         />
-        <TouchableOpacity onPress={submitForm} style={styles.button}>
+        <TouchableOpacity onPress={submitValue} style={styles.button}>
           <Ionicons name="add-outline" size={35} color="black" />
         </TouchableOpacity>
       </View>
